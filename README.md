@@ -1,13 +1,12 @@
-
 # Todo-App v2
 
 Create a todo app consist of  `title` and  `is finished`. The other functionalities of the application are the following:
 
--   Can create todo 
--   Can update specific todo
--   Can fetch todo
--   Can fetch all todos
--   Can delete a specific todo
+-   Can create `to do`
+-   Can update specific `to do`
+-   Can fetch `to do`
+-   Can fetch all `to dos`
+-   Can delete a specific `to do`
 
 **Instructions:** 
 
