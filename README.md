@@ -17,5 +17,5 @@ Also create a login page for the users in able to access the page.  **Adding rol
 
 Submit your answer by making a pull request and answer these questions in the pull request details.
 1.  Please elaborate the tech stacks used in this activity and why did you chose it?
-2.  Did you used software design patterns, paradigms or best practices for developing this application? If yes, why did you used it?
+2.  Did you used any software design patterns, paradigms or best practices for developing this application? If yes, why did you used it?
 3.  If you have an extra time, what features do you want to add?
