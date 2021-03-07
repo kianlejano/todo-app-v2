@@ -10,7 +10,7 @@ Create a todo app consist of  `title` and  `is finished`. The other functionalit
 
 **Instructions:** 
 
-Using this endpoint, [https://jsonplaceholder.typicode.com/todos](https://jsonplaceholder.typicode.com/), perform the following endpoints and save the data on the todos table.
+Consume this resource endpoint, [https://jsonplaceholder.typicode.com/todos](https://jsonplaceholder.typicode.com/) and save the data on the todos table.
 Please refer to the documentation of [jsonplaceholder](https://jsonplaceholder.typicode.com/).
 
 Also create a login page for the users in able to access the page.  **Adding roles of the user is a big plus but not required**.
