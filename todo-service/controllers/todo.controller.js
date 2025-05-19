@@ -40,6 +40,9 @@ export const getTodosByUserId = async (req, res) => {
 
 export const createTodo = async (req, res) => {
     try {
+        // create at JSON Placeholder
+        await jsonPlaceHolderApi.createTodos(req.body);
+
         const response = await Todo.create(req.body);
         return res.status(201).json(response);
     } catch (error) {
@@ -50,6 +53,10 @@ export const createTodo = async (req, res) => {
 export const updateTodo = async (req, res) => {
     try {
         const { id } = req.params;
+        
+        // update at JSON Placeholder
+        await jsonPlaceHolderApi.updateTodo(id, req.body);
+        
         const update = await Todo.update(
             req.body, 
             { where: { id } },
@@ -66,6 +73,11 @@ export const updateTodo = async (req, res) => {
 export const deleteTodo = async (req, res) => {
     try {
         const { id } = req.params;
+
+        // delete at JSON Placeholder
+        await jsonPlaceHolderApi.deleteTodo(id);
+
+
         const deleteData = await Todo.destroy({
             where: { id }
         })
