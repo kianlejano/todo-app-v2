@@ -4,7 +4,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Todo List
+                Home
             </h2>
         </template>
 
@@ -32,7 +32,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr v-for="(todo, index) in todos" :key="todo.id">
+                                <tr v-for="(todo, index) in todos.rows" :key="todo.id">
                                     <td class="px-6 py-4 text-sm">{{ index + 1 }}</td>
                                     <td class="px-6 py-4 text-sm">{{ todo.title }}</td>
                                     <td class="px-6 py-4 text-sm">
@@ -47,6 +47,47 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-2">
+                                <label for="limit" class="text-sm text-gray-700">Items per page:</label>
+                                <input
+                                    id="limit"
+                                    type="number"
+                                    min="1"
+                                    max="50"
+                                    v-model.number="limit"
+                                    @change="fetchTodos(1)"
+                                    class="border border-gray-300 rounded px-2 py-1 w-20"
+                                />
+                            </div>
+                            <div class="flex justify-end space-x-2">
+                                <button
+                                    @click="changePage(currentPage - 1)"
+                                    :disabled="currentPage === 1"
+                                    class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                                >
+                                    Prev
+                                </button>
+
+                                <button
+                                    v-for="page in totalPages"
+                                    :key="page"
+                                    @click="changePage(page)"
+                                    :class="['px-3 py-1 rounded',
+                                        page === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'
+                                    ]"
+                                >
+                                    {{ page }}
+                                </button>
+                                <button
+                                    @click="changePage(currentPage + 1)"
+                                    :disabled="currentPage === totalPages"
+                                    class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -100,6 +141,9 @@ const page = usePage()
 
 const todos = ref([])
 const userId = ref(null)
+const currentPage = ref(1)
+const totalPages = ref(1)
+const limit = ref(10)
 
 const showFormModal = ref(false)
 const showDeleteModal = ref(false)
@@ -113,10 +157,19 @@ onMounted(async () => {
     await fetchTodos()
 })
 
-async function fetchTodos() {
+async function fetchTodos(pageNumber = 1) {
     userId.value = page.props.auth.user.id
-    const res = await fetch(`${API_BASE_URL}/todos/user/${userId.value}`)
-    todos.value = await res.json()
+    const res = await fetch(`${API_BASE_URL}/todos/user/${userId.value}?page=${pageNumber}&limit=${limit.value}`)
+    const data = await res.json()
+    todos.value = data
+    totalPages.value = data.totalPages
+    currentPage.value = data.currentPage
+}
+
+function changePage(pageNum) {
+    if (pageNum < 1 || pageNum > totalPages.value) return
+    currentPage.value = pageNum
+    fetchTodos(pageNum)
 }
 
 function openCreateModal() {

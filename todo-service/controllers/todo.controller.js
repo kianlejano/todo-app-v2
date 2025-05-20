@@ -4,8 +4,19 @@ import * as jsonPlaceHolderApi from '../services/jsonPlaceHolderServices.js';
 
 export const getTodos = async (req, res) => {
     try {
-        const response = await Todo.findAll();
-        return res.status(200).json(response);
+        let { page, limit } = req.query
+        page = parseInt(page) || 1;
+        limit = Math.min(parseInt(limit) || 10, 50);
+        const offset = (page - 1) * limit;
+        const response = await Todo.findAndCountAll({
+            limit,
+            offset,
+        });
+        return res.status(200).json({
+            ...response, 
+            totalPages: Math.ceil(response.count / limit),
+            currentPage: page
+        });
     } catch (error) {
         return res.status(500).json({ message: 'Failed to fetch todos', error: error.message });
     }
@@ -29,10 +40,20 @@ export const getTodosById = async (req, res) => {
 export const getTodosByUserId = async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await Todo.findAll({
+        let { page, limit } = req.query
+        page = parseInt(page) || 1;
+        limit = Math.min(parseInt(limit) || 10, 50);
+        const offset = (page - 1) * limit;
+        const response = await Todo.findAndCountAll({
             where:{ userId: id },
+            limit,
+            offset,
         })
-        return res.status(200).json(response);
+        return res.status(200).json({
+            ...response, 
+            totalPages: Math.ceil(response.count / limit),
+            currentPage: page
+        });
     } catch (error) {
         return res.status(500).json({ message: 'Failed to fetch user todos', error: error.message });
     }
